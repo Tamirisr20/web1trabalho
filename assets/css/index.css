@@ -1,0 +1,35 @@
+body {
+    background: linear-gradient(to bottom, rgb(195, 40, 177), rgb(72, 27, 144) 40%, rgb(27, 26, 138) 60%);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+    text-align: left;
+}
+
+#avatarPreview {
+    margin-top: 20px;
+    height: 300px;
+    width: 200px;
+    border: 10px  #000;
+}
+
+form {
+    width: 300px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #9370db
+
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultório Odontológico</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <h1 id="logado"> </h1>
+    <buttom onclick='sair()'> Sair </buttom>
+    <h1>Bem-Vindo!</h1>
+    <h2>Faça o cadastro do paciente:</h2>
+    <form action="formulario_cadastro.php" method="post">
+        <label for="nome">Nome do paciente: </label>
+        <input type="text" id="nome" name="nome">
+
+        <label for="idade_paciente">Idade do paciente: </label>
+        <input type="number" id="idade_paciente" name="idade_paciente">
+
+        <label for="data_nasc">Data de nascimento do paciente: </label>
+        <input type="date" id="data_nasc" name="data_nasc">
+
+        <label for="alergias_paciente">Paciente possui alergias? Se sim, quais? </label>
+        <input type="text" id="alergias_paciente" name="alergias_paciente">
+
+        <label for="nome_responsavel">Nome do responsável: </label>
+        <input type="text" id="nome_responsavel" name="nome_responsavel">
+
+        <label for="email">E-mail do Responsável: </label>
+        <input type="email" id="email" name="email">
+
+        <input type="submit" value="Enviar">
+
+    </form>
+    <h1>Construa seu Avatar</h1>
+    <form id="avatarForm">
+        <label for="corPele">Cor da pele:</label>
+        <input type="color" id="corPele" name="corPele"><br><br>
+
+        <label for="formaOlho">Formato dos olhos:</label>
+        <select id="formaOlho" name="formaOlho">
+            <option value="round">Redondo</option>
+            <option value="almond">Amendoado</option>
+        </select><br><br>
+
+        <label for="corOlho">Cor dos olhos:</label>
+        <input type="color" id="corOlho" name="corOlho"><br><br>
+
+        <label for="formaBoca">Formato da boca:</label>
+        <select id="formaBoca" name="formaBoca">
+            <option value="smile">Sorriso</option>
+            <option value="neutral">Neutra</option>
+        </select><br><br>
+
+        <label for="cabelo">Estilo do cabelo:</label>
+        <select id="cabelo" name="cabelo">
+            <option value="curto">Curto</option>
+            <option value="longo">Longo</option>
+        </select><br><br>
+
+        <label for="corCabelo">Cor do cabelo:</label>
+        <input type="color" id="corCabelo" name="corCabelo"><br><br>
+
+        <label for="roupa">Roupas:</label>
+        <select id="roupa" name="roupa">
+            <option value="dress">Vestido</option>
+            <option value="shirt-pants">Camisa e Calça</option>
+        </select><br><br>
+
+        <button type="button" onclick="saveAvatar()">Salvar Avatar</button>
+    </form>
+    
+    <div id="avatarPreview"></div>
+
+    <script src="script.js"></script>
+    <script src="../assets/js/index.js"></script>
+</body>
+</html>
