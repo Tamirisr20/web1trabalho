@@ -1,10 +1,10 @@
 let btnEsquerdo = document.getElementById("btn__esquedo");
 
-let cabelo = "./assets/images/cabelo/1.png";
-let emoções = "./assets/images/emoções/1.png";
-let cor = "./assets/images/cor/1.png";
-let partecima = "./assets/images/partecima/1.png";
-let partebaixa = "./assets/images/partebaixa/1.png";
+let cabelo = "./assets/imagens/cabelo/1.png";
+let emoções = "./assets/imagens/emoções/1.png";
+let cor = "./assets/imagens/cor/1.png";
+let partecima = "./assets/imagens/partecima/1.png";
+let partebaixa = "./assets/imagens/partebaixa/1.png";
 
 function crescendoCabelo(element, imgCabelo) {
     const num = 7;
