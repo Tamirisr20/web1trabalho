@@ -1,0 +1,211 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang22 Para desenvolver o sistema descrito, voc\'ea pode seguir um conjunto de etapas. Abaixo est\'e1 um guia passo-a-passo para ajudar na constru\'e7\'e3o do sistema, desde a configura\'e7\'e3o inicial at\'e9 a implementa\'e7\'e3o das funcionalidades:\par
+\par
+### Etapa 1: Configura\'e7\'e3o do Ambiente\par
+\par
+1. **Configura\'e7\'e3o do Servidor Local**:\par
+   - Instale um servidor local como XAMPP ou WAMP, que inclui Apache, PHP e MariaDB/MySQL.\par
+\par
+2. **Cria\'e7\'e3o do Banco de Dados**:\par
+   - Inicie o servidor local e acesse o phpMyAdmin para criar o banco de dados `web1`.\par
+   - Crie a tabela `usuario` para armazenar os dados dos usu\'e1rios (crian\'e7as e odontopediatras).\par
+\par
+```sql\par
+CREATE DATABASE web1;\par
+USE web1;\par
+\par
+CREATE TABLE usuario (\par
+    id INT AUTO_INCREMENT PRIMARY KEY,\par
+    nome VARCHAR(100) NOT NULL,\par
+    tipo ENUM('crianca', 'odontopediatra') NOT NULL,\par
+    data_nascimento DATE,\par
+    email VARCHAR(100),\par
+    senha VARCHAR(255) NOT NULL,\par
+    avatar TEXT\par
+);\par
+```\par
+\par
+### Etapa 2: Desenvolvimento do Backend (PHP)\par
+\par
+1. **Cadastro de Usu\'e1rio (Crian\'e7a e Odontopediatra)**:\par
+   - Crie um formul\'e1rio de cadastro para crian\'e7a e odontopediatra com valida\'e7\'e3o em JavaScript e PHP.\par
+\par
+```php\par
+// cadastro.php\par
+<?php\par
+// Conex\'e3o com o banco de dados\par
+$conn = new mysqli("localhost", "root", "", "web1");\par
+\par
+if ($_SERVER['REQUEST_METHOD'] == 'POST') \{\par
+    $nome = $_POST['nome'];\par
+    $tipo = $_POST['tipo'];\par
+    $data_nascimento = $_POST['data_nascimento'];\par
+    $email = $_POST['email'];\par
+    $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);\par
+\par
+    // Inser\'e7\'e3o no banco de dados\par
+    $sql = "INSERT INTO usuario (nome, tipo, data_nascimento, email, senha) VALUES (?, ?, ?, ?, ?)";\par
+    $stmt = $conn->prepare($sql);\par
+    $stmt->bind_param("sssss", $nome, $tipo, $data_nascimento, $email, $senha);\par
+    $stmt->execute();\par
+    echo "Cadastro realizado com sucesso!";\par
+\}\par
+?>\par
+```\par
+\par
+2. **Login de Usu\'e1rio**:\par
+   - Implemente um sistema de login para que as crian\'e7as possam acessar seu avatar e responder \'e0s perguntas.\par
+\par
+```php\par
+// login.php\par
+<?php\par
+session_start();\par
+$conn = new mysqli("localhost", "root", "", "web1");\par
+\par
+if ($_SERVER['REQUEST_METHOD'] == 'POST') \{\par
+    $email = $_POST['email'];\par
+    $senha = $_POST['senha'];\par
+\par
+    $sql = "SELECT * FROM usuario WHERE email = ?";\par
+    $stmt = $conn->prepare($sql);\par
+    $stmt->bind_param("s", $email);\par
+    $stmt->execute();\par
+    $result = $stmt->get_result();\par
+\par
+    if ($result->num_rows > 0) \{\par
+        $user = $result->fetch_assoc();\par
+        if (password_verify($senha, $user['senha'])) \{\par
+            $_SESSION['user_id'] = $user['id'];\par
+            echo "Login realizado com sucesso!";\par
+            // Redirecionar para a p\'e1gina do avatar\par
+        \} else \{\par
+            echo "Senha incorreta!";\par
+        \}\par
+    \} else \{\par
+        echo "Usu\'e1rio n\'e3o encontrado!";\par
+    \}\par
+\}\par
+?>\par
+```\par
+\par
+### Etapa 3: Desenvolvimento do Frontend (HTML, CSS, JavaScript)\par
+\par
+1. **Formul\'e1rio de Cadastro e Login**:\par
+   - Crie formul\'e1rios em HTML para cadastro e login, utilizando CSS para estiliza\'e7\'e3o e JavaScript para valida\'e7\'e3o de dados.\par
+\par
+```html\par
+<!-- cadastro.html -->\par
+<form action="cadastro.php" method="post" onsubmit="return validarFormulario()">\par
+    Nome: <input type="text" name="nome" required><br>\par
+    Tipo: <select name="tipo" required>\par
+        <option value="crianca">Crian\'e7a</option>\par
+        <option value="odontopediatra">Odontopediatra</option>\par
+    </select><br>\par
+    Data de Nascimento: <input type="date" name="data_nascimento" required><br>\par
+    Email: <input type="email" name="email"><br>\par
+    Senha: <input type="password" name="senha" required><br>\par
+    <button type="submit">Cadastrar</button>\par
+</form>\par
+\par
+<script>\par
+function validarFormulario() \{\par
+    // Valida\'e7\'f5es em JavaScript\par
+    return true;\par
+\}\par
+</script>\par
+```\par
+\par
+2. **Cria\'e7\'e3o do Avatar**:\par
+   - Utilize uma biblioteca JavaScript como DiceBear Avatars para permitir que a crian\'e7a crie seu avatar.\par
+\par
+```html\par
+<!-- avatar.html -->\par
+<div id="avatar-container"></div>\par
+<button onclick="saveAvatar()">Salvar Avatar</button>\par
+\par
+<script src="https://avatars.dicebear.com/api/bottts/:seed.svg"></script>\par
+<script>\par
+let avatarOptions = \{\par
+    skin: 'yellow',\par
+    eyes: 'normal',\par
+    mouth: 'smile',\par
+    // Adicione outras op\'e7\'f5es aqui\par
+\};\par
+\par
+function saveAvatar() \{\par
+    // Salvar avatar no banco de dados\par
+\}\par
+</script>\par
+```\par
+\par
+### Etapa 4: Funcionalidades de Avalia\'e7\'e3o\par
+\par
+1. **Formul\'e1rio de Avalia\'e7\'e3o**:\par
+   - Crie um formul\'e1rio para que a crian\'e7a responda perguntas antes e depois da consulta.\par
+\par
+```html\par
+<!-- avaliacao.html -->\par
+<form action="avaliacao.php" method="post">\par
+    <label>Como voc\'ea se sente? </label>\par
+    <select name="sentimento">\par
+        <option value="feliz">Feliz</option>\par
+        <option value="triste">Triste</option>\par
+        <option value="ansioso">Ansioso</option>\par
+        <!-- Adicione outras op\'e7\'f5es -->\par
+    </select><br>\par
+    <button type="submit">Enviar Avalia\'e7\'e3o</button>\par
+</form>\par
+```\par
+\par
+2. **Armazenamento das Avalia\'e7\'f5es**:\par
+   - Crie uma tabela para armazenar as respostas de avalia\'e7\'e3o.\par
+\par
+```sql\par
+CREATE TABLE avaliacao (\par
+    id INT AUTO_INCREMENT PRIMARY KEY,\par
+    user_id INT,\par
+    sentimento VARCHAR(50),\par
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\par
+    tipo ENUM('pre', 'pos'),\par
+    FOREIGN KEY (user_id) REFERENCES usuario(id)\par
+);\par
+```\par
+\par
+```php\par
+// avaliacao.php\par
+<?php\par
+session_start();\par
+$conn = new mysqli("localhost", "root", "", "web1");\par
+\par
+if ($_SERVER['REQUEST_METHOD'] == 'POST') \{\par
+    $user_id = $_SESSION['user_id'];\par
+    $sentimento = $_POST['sentimento'];\par
+    $tipo = 'pre'; // ou 'pos' dependendo do contexto\par
+\par
+    $sql = "INSERT INTO avaliacao (user_id, sentimento, tipo) VALUES (?, ?, ?)";\par
+    $stmt = $conn->prepare($sql);\par
+    $stmt->bind_param("iss", $user_id, $sentimento, $tipo);\par
+    $stmt->execute();\par
+    echo "Avalia\'e7\'e3o enviada com sucesso!";\par
+\}\par
+?>\par
+```\par
+\par
+### Etapa 5: Teste e Ajustes\par
+\par
+1. **Teste do Sistema**:\par
+   - Teste todas as funcionalidades no navegador, preferencialmente no Google Chrome com o modo desenvolvedor ativado para simular diferentes tamanhos de tela.\par
+\par
+2. **Ajustes e Melhorias**:\par
+   - Fa\'e7a ajustes no CSS para garantir que o sistema seja responsivo e tenha uma boa usabilidade em dispositivos m\'f3veis.\par
+   - Adicione feedback visual para os usu\'e1rios durante o cadastro, login e cria\'e7\'e3o do avatar.\par
+\par
+3. **Documenta\'e7\'e3o**:\par
+   - Documente o c\'f3digo e o processo de desenvolvimento para facilitar futuras manuten\'e7\'f5es e expans\'f5es do sistema.\par
+\par
+### Conclus\'e3o\par
+\par
+Seguindo estas etapas, voc\'ea conseguir\'e1 desenvolver um sistema de odontopediatria para avalia\'e7\'e3o da crian\'e7a no pr\'e9 e p\'f3s atendimento odontol\'f3gico. O foco inicial deve ser na funcionalidade b\'e1sica e, em vers\'f5es futuras, voc\'ea pode expandir as op\'e7\'f5es de avatar e melhorar a experi\'eancia do usu\'e1rio.\par
+}
+ 
